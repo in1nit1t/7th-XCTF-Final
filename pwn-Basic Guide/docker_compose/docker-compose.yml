@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  aesm:
+    image: sgx_aesm
+    devices:
+      - /dev/isgx
+    volumes:
+      - aesmd-socket:/var/run/aesmd
+    stdin_open: true
+    tty: true
+
+  basic_guide:
+    image: basic_guide
+    depends_on:
+      - aesm
+    devices:
+      - /dev/isgx
+    volumes:
+      - aesmd-socket:/var/run/aesmd
+    stdin_open: true
+    tty: true
+    ports:
+      - "0.0.0.0:10000:9999"
+
+volumes:
+  aesmd-socket:
+    external: true
